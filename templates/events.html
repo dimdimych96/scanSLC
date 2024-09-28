@@ -1,0 +1,60 @@
+<!-- app/templates/events.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>События</h2>
+
+<!-- Форма для создания нового события -->
+<div class="card mb-4">
+    <div class="card-header">
+        Создать Новое Событие
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('events') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.name.label(class="form-control-label") }}
+                {{ form.name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.date.label(class="form-control-label") }}
+                {{ form.date(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Список существующих событий -->
+<h3>Существующие События</h3>
+{% if events %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Дата</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.id }}</td>
+                <td>{{ event.name }}</td>
+                <td>{{ event.date.strftime('%d.%m.%Y') }}</td>
+                <td>
+                    <a href="{{ url_for('manage_event', event_id=event.id) }}" class="btn btn-sm btn-info">Управлять</a>
+                    <a href="#" class="btn btn-sm btn-warning">Редактировать</a>
+                    <a href="#" class="btn btn-sm btn-danger">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Нет доступных событий.</p>
+{% endif %}
+{% endblock %}
